@@ -1,0 +1,7 @@
+rootProject.name='BookReader'
+include ':app'
+include ':lib_pdf'
+include ':lib_base'
+include ':lib_epub'
+include ':lib_txt'
+include ':lib_reader'
