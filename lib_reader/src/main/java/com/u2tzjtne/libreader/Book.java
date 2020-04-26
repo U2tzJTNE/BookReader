@@ -15,6 +15,15 @@ public class Book {
     private Type type;
     private String path;
     private String name;
+    private int pageNumber;
+
+    public int getPageNumber() {
+        return pageNumber;
+    }
+
+    public void setPageNumber(int pageNumber) {
+        this.pageNumber = pageNumber;
+    }
 
     public Type getType() {
         return type;

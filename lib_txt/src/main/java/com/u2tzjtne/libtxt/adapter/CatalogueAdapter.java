@@ -14,17 +14,19 @@ import com.u2tzjtne.libtxt.db.BookCatalogue;
 
 import java.util.List;
 
+/**
+ * @author u2tzjtne
+ */
 public class CatalogueAdapter extends BaseAdapter {
     private Context mContext;
     private List<BookCatalogue> bookCatalogueList;
     private Typeface typeface;
-    private Config config;
     private int currentCharter = 0;
 
     public CatalogueAdapter(Context context, List<BookCatalogue> bookCatalogueList) {
         mContext = context;
         this.bookCatalogueList = bookCatalogueList;
-        config = config.getInstance();
+        Config config = Config.getInstance();
         typeface = config.getTypeface();
     }
 
@@ -66,11 +68,10 @@ public class CatalogueAdapter extends BaseAdapter {
             viewHolder.catalogue_tv.setTextColor(mContext.getResources().getColor(R.color.read_textColor));
         }
         viewHolder.catalogue_tv.setText(bookCatalogueList.get(position).getBookCatalogue());
-        //Log.d("catalogue",bookCatalogueList.get(position).getBookCatalogue());
         return convertView;
     }
 
-    class ViewHolder {
+    static class ViewHolder {
         TextView catalogue_tv;
     }
 }

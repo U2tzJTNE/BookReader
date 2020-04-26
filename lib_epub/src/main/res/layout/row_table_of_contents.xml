@@ -12,7 +12,7 @@
         android:layout_height="wrap_content"
         android:padding="8dp" />
 
-    <com.folioreader.util.StyleableTextView
+    <com.u2tzjtne.libepub.util.StyleableTextView
         android:id="@+id/section_title"
         android:layout_width="wrap_content"
         android:layout_height="match_parent"

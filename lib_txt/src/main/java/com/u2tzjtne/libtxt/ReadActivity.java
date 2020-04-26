@@ -61,7 +61,6 @@ public class ReadActivity extends BaseActivity implements View.OnClickListener {
     private SeekBar sbProgress;
     private TextView tvDayOrNight;
     private RelativeLayout rlBottom;
-    private RelativeLayout rlReadBottom;
     private Toolbar toolbar;
     private AppBarLayout appbar;
 
@@ -93,14 +92,14 @@ public class ReadActivity extends BaseActivity implements View.OnClickListener {
 
     @Override
     public int getLayoutRes() {
-        return R.layout.activity_read;
+        return R.layout.activity_txt_read;
     }
 
     @Override
     protected void initData() {
         toolbar.setTitle("");
         setSupportActionBar(toolbar);
-        toolbar.setNavigationIcon(R.mipmap.return_button);
+        toolbar.setNavigationIcon(R.drawable.return_button);
         toolbar.setNavigationOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -163,7 +162,6 @@ public class ReadActivity extends BaseActivity implements View.OnClickListener {
         findViewById(R.id.tv_pagemode).setOnClickListener(this);
         findViewById(R.id.tv_setting).setOnClickListener(this);
         rlBottom = findViewById(R.id.rl_bottom);
-        rlReadBottom = findViewById(R.id.rl_read_bottom);
         toolbar = findViewById(R.id.toolbar);
         appbar = findViewById(R.id.appbar);
     }
@@ -507,7 +505,6 @@ public class ReadActivity extends BaseActivity implements View.OnClickListener {
 
     private void hideReadSetting() {
         isShow = false;
-        Animation bottomAnim = AnimationUtils.loadAnimation(this, R.anim.dialog_exit);
         Animation topAnim = AnimationUtils.loadAnimation(this, R.anim.dialog_top_exit);
         if (rlBottom.getVisibility() == View.VISIBLE) {
             rlBottom.startAnimation(topAnim);
@@ -515,11 +512,7 @@ public class ReadActivity extends BaseActivity implements View.OnClickListener {
         if (appbar.getVisibility() == View.VISIBLE) {
             appbar.startAnimation(topAnim);
         }
-        if (rlReadBottom.getVisibility() == View.VISIBLE) {
-            rlReadBottom.startAnimation(topAnim);
-        }
         rlBottom.setVisibility(View.GONE);
-        rlReadBottom.setVisibility(View.GONE);
         appbar.setVisibility(View.GONE);
         hideSystemUI();
     }

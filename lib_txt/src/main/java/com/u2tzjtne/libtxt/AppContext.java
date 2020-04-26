@@ -14,7 +14,9 @@ import java.io.IOException;
 import java.io.InputStream;
 
 /**
- * Created by Administrator on 2016/7/8 0008.
+ *
+ * @author Administrator
+ * @date 2016/7/8 0008
  */
 public class AppContext extends LitePalApplication {
     public static volatile Context applicationContext = null;

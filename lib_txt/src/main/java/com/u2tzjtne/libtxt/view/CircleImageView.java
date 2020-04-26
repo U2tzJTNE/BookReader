@@ -23,6 +23,7 @@ import androidx.appcompat.widget.AppCompatImageView;
 
 import com.u2tzjtne.libtxt.R;
 
+
 /**
  * 流程控制的比较严谨，比如setup函数的使用
  * updateShaderMatrix保证图片损失度最小和始终绘制图片正中央的那部分

@@ -17,7 +17,7 @@
             android:exported="false" />
 
         <activity
-            android:name="com.u2tzjtne.libepub.ui.activity.FolioActivity"
+            android:name="com.u2tzjtne.libepub.ui.activity.ReadActivity"
             android:label="@string/app_name"
             android:theme="@style/FolioActivityDayTheme" />
 
