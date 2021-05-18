@@ -12,7 +12,7 @@ import androidx.core.content.ContextCompat;
 import androidx.fragment.app.FragmentTransaction;
 import com.u2tzjtne.libepub.Config;
 import com.u2tzjtne.libepub.Constants;
-import com.u2tzjtne.libepub.EpubReader;
+import com.u2tzjtne.libepub.EPUBReader;
 import com.u2tzjtne.libepub.ui.fragment.HighlightFragment;
 import com.u2tzjtne.libepub.ui.fragment.TableOfContentFragment;
 import com.u2tzjtne.libepub.util.AppUtil;
@@ -110,7 +110,7 @@ public class ContentHighlightActivity extends AppCompatActivity {
     private void loadHighlightsFragment() {
         findViewById(R.id.btn_contents).setSelected(false);
         findViewById(R.id.btn_highlights).setSelected(true);
-        String bookId = getIntent().getStringExtra(EpubReader.EXTRA_BOOK_ID);
+        String bookId = getIntent().getStringExtra(EPUBReader.EXTRA_BOOK_ID);
         String bookTitle = getIntent().getStringExtra(Constants.BOOK_TITLE);
         HighlightFragment highlightFragment = HighlightFragment.newInstance(bookId, bookTitle);
         FragmentTransaction ft = getSupportFragmentManager().beginTransaction();

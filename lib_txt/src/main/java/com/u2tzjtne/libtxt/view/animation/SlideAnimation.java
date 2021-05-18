@@ -7,7 +7,9 @@ import android.util.Log;
 import android.widget.Scroller;
 
 /**
- * Created by Administrator on 2016/8/29 0029.
+ *
+ * @author Administrator
+ * @date 2016/8/29 0029
  */
 public class SlideAnimation extends AnimationProvider {
     private Rect mSrcRect, mDestRect,mNextSrcRect,mNextDestRect;
@@ -23,8 +25,6 @@ public class SlideAnimation extends AnimationProvider {
     @Override
     public void drawMove(Canvas canvas) {
         if (getDirection().equals(AnimationProvider.Direction.next)){
-//            mSrcRect.left = (int) ( - (mScreenWidth - mTouch.x));
-//            mSrcRect.right =  mSrcRect.left + mScreenWidth;
             int dis = (int) (mScreenWidth - myStartX + mTouch.x);
             if (dis > mScreenWidth){
                 dis = mScreenWidth;
@@ -87,14 +87,11 @@ public class SlideAnimation extends AnimationProvider {
             if (getCancel()){
                 dx = (int) - Math.abs(mTouch.x - myStartX);
             }else{
-//                dx = (int) (mScreenWidth - mTouch.x);
                 dx = (int) (mScreenWidth - (mTouch.x - myStartX));
             }
         }
         //滑动速度保持一致
          int duration =  (400 * Math.abs(dx)) / mScreenWidth;
-        Log.e("duration",duration + "");
         scroller.startScroll((int) mTouch.x, 0, dx, 0, duration);
     }
-
 }

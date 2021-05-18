@@ -12,7 +12,7 @@ import androidx.core.content.ContextCompat;
 import org.json.JSONObject;
 
 /**
- * Configuration class for EpubReader.
+ * Configuration class for EPUBReader.
  * @author u2tzjtne
  */
 @SuppressWarnings("PMD.AvoidDuplicateLiterals")

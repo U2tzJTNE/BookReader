@@ -13,7 +13,9 @@ import android.view.WindowManager;
 import java.lang.reflect.Method;
 
 /**
- * Created by Administrator on 2016/1/17.
+ *
+ * @author Administrator
+ * @date 2016/1/17
  */
 public class CommonUtil {
 
@@ -26,7 +28,10 @@ public class CommonUtil {
     public static int getDpi(Context context) {
         int dpi = 0;
         WindowManager windowManager = (WindowManager) context.getSystemService(Context.WINDOW_SERVICE);
-        Display display = windowManager.getDefaultDisplay();
+        Display display = null;
+        if (windowManager != null) {
+            display = windowManager.getDefaultDisplay();
+        }
         DisplayMetrics displayMetrics = new DisplayMetrics();
         @SuppressWarnings("rawtypes")
         Class c;
@@ -66,7 +71,9 @@ public class CommonUtil {
         WindowManager wm = (WindowManager) context
                 .getSystemService(Context.WINDOW_SERVICE);
         DisplayMetrics outMetrics = new DisplayMetrics();
-        wm.getDefaultDisplay().getMetrics(outMetrics);
+        if (wm != null) {
+            wm.getDefaultDisplay().getMetrics(outMetrics);
+        }
         return outMetrics.heightPixels;
     }
 
@@ -101,13 +108,13 @@ public class CommonUtil {
     }
 
     public static int getAPIVersion() {
-        int APIVersion;
+        int apiVersion;
         try {
-            APIVersion = Integer.valueOf(android.os.Build.VERSION.SDK);
+            apiVersion = Integer.parseInt(android.os.Build.VERSION.SDK);
         } catch (NumberFormatException e) {
-            APIVersion = 0;
+            apiVersion = 0;
         }
-        return APIVersion;
+        return apiVersion;
     }
 
     /**

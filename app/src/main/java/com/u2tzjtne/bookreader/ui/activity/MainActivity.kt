@@ -12,6 +12,7 @@ import androidx.drawerlayout.widget.DrawerLayout
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.Toolbar
 import com.u2tzjtne.bookreader.R
+import com.u2tzjtne.libbase.util.LogUtils
 
 class MainActivity : AppCompatActivity() {
 
@@ -34,6 +35,7 @@ class MainActivity : AppCompatActivity() {
         ), drawerLayout)
         setupActionBarWithNavController(navController, appBarConfiguration)
         navView.setupWithNavController(navController)
+        LogUtils.d("this is test log!")
     }
 
     override fun onCreateOptionsMenu(menu: Menu): Boolean {

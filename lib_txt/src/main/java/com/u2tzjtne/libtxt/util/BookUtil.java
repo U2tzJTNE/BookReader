@@ -17,6 +17,7 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.OutputStreamWriter;
 import java.lang.ref.WeakReference;
+import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -25,15 +26,18 @@ import java.util.List;
  * @date 2016/8/11 0011
  */
 public class BookUtil {
-    private static final String cachedPath = Environment.getExternalStorageDirectory() + "/libtxt/";
-    //存储的字符数
-    public static final int cachedSize = 30000;
+    private static final String CACHED_PATH = Environment.getExternalStorageDirectory() + "/libtxt/";
+    /**
+     * 存储的字符数
+     */
+    private static final int cachedSize = 30000;
 
-    protected final ArrayList<Cache> myArray = new ArrayList<>();
-    //目录
+    private final ArrayList<Cache> myArray = new ArrayList<>();
+    /**
+     * 目录
+     */
     private List<BookCatalogue> directoryList = new ArrayList<>();
 
-    private String m_strCharsetName;
     private String bookName;
     private String bookPath;
     private long bookLen;
@@ -41,7 +45,7 @@ public class BookUtil {
     private BookList bookList;
 
     public BookUtil() {
-        File file = new File(cachedPath);
+        File file = new File(CACHED_PATH);
         if (!file.exists()) {
             file.mkdir();
         }
@@ -60,13 +64,15 @@ public class BookUtil {
     }
 
     private void cleanCacheFile() {
-        File file = new File(cachedPath);
+        File file = new File(CACHED_PATH);
         if (!file.exists()) {
             file.mkdir();
         } else {
             File[] files = file.listFiles();
-            for (int i = 0; i < files.length; i++) {
-                files[i].delete();
+            if (files != null) {
+                for (File value : files) {
+                    value.delete();
+                }
             }
         }
     }
@@ -88,41 +94,40 @@ public class BookUtil {
         if (position >= bookLen) {
             return null;
         }
-        String line = "";
+        StringBuilder line = new StringBuilder();
         while (position < bookLen) {
             int word = next(false);
             if (word == -1) {
                 break;
             }
             char wordChar = (char) word;
-            if ((wordChar + "").equals("\r") && (((char) next(true)) + "").equals("\n")) {
+            if ("\r".equals(wordChar + "") && "\n".equals(((char) next(true)) + "")) {
                 next(false);
                 break;
             }
-            line += wordChar;
+            line.append(wordChar);
         }
-        return line.toCharArray();
+        return line.toString().toCharArray();
     }
 
     public char[] preLine() {
         if (position <= 0) {
             return null;
         }
-        String line = "";
+        StringBuilder line = new StringBuilder();
         while (position >= 0) {
             int word = pre(false);
             if (word == -1) {
                 break;
             }
             char wordChar = (char) word;
-            if ((wordChar + "").equals("\n") && (((char) pre(true)) + "").equals("\r")) {
+            if ("\n".equals(wordChar + "") && "\r".equals(((char) pre(true)) + "")) {
                 pre(false);
-//                line = "\r\n" + line;
                 break;
             }
-            line = wordChar + line;
+            line.insert(0, wordChar);
         }
-        return line.toCharArray();
+        return line.toString().toCharArray();
     }
 
     public char current() {
@@ -160,26 +165,30 @@ public class BookUtil {
         return position;
     }
 
-    public void setPostition(long position) {
+    public void setPosition(long position) {
         this.position = position;
     }
 
-    //缓存书本
+    /**
+     * 缓存书本
+     * @throws IOException
+     */
     private void cacheBook() throws IOException {
+        String mStrCharsetName;
         if (TextUtils.isEmpty(bookList.getCharset())) {
-            m_strCharsetName = FileUtils.getCharset(bookPath);
-            if (m_strCharsetName == null) {
-                m_strCharsetName = "utf-8";
+            mStrCharsetName = FileUtils.getCharset(bookPath);
+            if (mStrCharsetName == null) {
+                mStrCharsetName = "utf-8";
             }
             ContentValues values = new ContentValues();
-            values.put("charset", m_strCharsetName);
+            values.put("charset", mStrCharsetName);
             DataSupport.update(BookList.class, values, bookList.getId());
         } else {
-            m_strCharsetName = bookList.getCharset();
+            mStrCharsetName = bookList.getCharset();
         }
 
         File file = new File(bookPath);
-        InputStreamReader reader = new InputStreamReader(new FileInputStream(file), m_strCharsetName);
+        InputStreamReader reader = new InputStreamReader(new FileInputStream(file), mStrCharsetName);
         int index = 0;
         bookLen = 0;
         directoryList.clear();
@@ -208,7 +217,7 @@ public class BookUtil {
                 if (!cacheBook.exists()) {
                     cacheBook.createNewFile();
                 }
-                final OutputStreamWriter writer = new OutputStreamWriter(new FileOutputStream(fileName(index)), "UTF-16LE");
+                final OutputStreamWriter writer = new OutputStreamWriter(new FileOutputStream(fileName(index)), StandardCharsets.UTF_16LE);
                 writer.write(buf);
                 writer.close();
             } catch (IOException e) {
@@ -225,8 +234,10 @@ public class BookUtil {
         }.start();
     }
 
-    //获取章节
-    public synchronized void getChapter() {
+    /**
+     * 获取章节
+     */
+    private synchronized void getChapter() {
         try {
             long size = 0;
             for (int i = 0; i < myArray.size(); i++) {
@@ -263,12 +274,16 @@ public class BookUtil {
         return bookLen;
     }
 
-    protected String fileName(int index) {
-        return cachedPath + bookName + index;
+    private String fileName(int index) {
+        return CACHED_PATH + bookName + index;
     }
 
-    //获取书本缓存
-    public char[] block(int index) {
+    /**
+     * 获取书本缓存
+     * @param index
+     * @return
+     */
+    private char[] block(int index) {
         if (myArray.size() == 0) {
             return new char[1];
         }
@@ -282,10 +297,7 @@ public class BookUtil {
                 }
                 block = new char[size / 2];
                 InputStreamReader reader =
-                        new InputStreamReader(
-                                new FileInputStream(file),
-                                "UTF-16LE"
-                        );
+                        new InputStreamReader(new FileInputStream(file), StandardCharsets.UTF_16LE);
                 if (reader.read(block) != block.length) {
                     throw new RuntimeException("Error during reading " + fileName(index));
                 }
@@ -294,7 +306,7 @@ public class BookUtil {
                 throw new RuntimeException("Error during reading " + fileName(index));
             }
             Cache cache = myArray.get(index);
-            cache.setData(new WeakReference<char[]>(block));
+            cache.setData(new WeakReference<>(block));
         }
         return block;
     }

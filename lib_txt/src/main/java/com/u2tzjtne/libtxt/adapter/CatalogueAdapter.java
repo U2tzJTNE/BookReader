@@ -56,22 +56,22 @@ public class CatalogueAdapter extends BaseAdapter {
         if(convertView==null) {
             viewHolder= new ViewHolder();
             convertView = inflater.inflate(R.layout.cataloguelistview_item,null);
-            viewHolder.catalogue_tv = (TextView)convertView.findViewById(R.id.catalogue_tv);
-            viewHolder.catalogue_tv.setTypeface(typeface);
+            viewHolder.tvCatalogue = (TextView)convertView.findViewById(R.id.catalogue_tv);
+            viewHolder.tvCatalogue.setTypeface(typeface);
             convertView.setTag(viewHolder);
         }else {
             viewHolder = (ViewHolder)convertView.getTag();
         }
         if (currentCharter == position){
-            viewHolder.catalogue_tv.setTextColor(mContext.getResources().getColor(R.color.colorAccent));
+            viewHolder.tvCatalogue.setTextColor(mContext.getResources().getColor(R.color.colorAccent));
         }else{
-            viewHolder.catalogue_tv.setTextColor(mContext.getResources().getColor(R.color.read_textColor));
+            viewHolder.tvCatalogue.setTextColor(mContext.getResources().getColor(R.color.read_textColor));
         }
-        viewHolder.catalogue_tv.setText(bookCatalogueList.get(position).getBookCatalogue());
+        viewHolder.tvCatalogue.setText(bookCatalogueList.get(position).getBookCatalogue());
         return convertView;
     }
 
     static class ViewHolder {
-        TextView catalogue_tv;
+        TextView tvCatalogue;
     }
 }

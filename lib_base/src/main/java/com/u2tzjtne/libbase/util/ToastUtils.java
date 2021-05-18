@@ -26,11 +26,11 @@ public class ToastUtils {
     }
 
     @SuppressLint("ShowToast")
-    public static void s(int messageID) {
+    public static void s(int messageId) {
         if (mToast == null) {
-            mToast = Toast.makeText(BaseApp.getInstance(), messageID, Toast.LENGTH_SHORT);
+            mToast = Toast.makeText(BaseApp.getInstance(), messageId, Toast.LENGTH_SHORT);
         } else {
-            mToast.setText(messageID);
+            mToast.setText(messageId);
             mToast.setDuration(Toast.LENGTH_SHORT);
         }
         mToast.show();
@@ -48,11 +48,11 @@ public class ToastUtils {
     }
 
     @SuppressLint("ShowToast")
-    public static void l(int messageID) {
+    public static void l(int messageId) {
         if (mToast == null) {
-            mToast = Toast.makeText(BaseApp.getInstance(), messageID, Toast.LENGTH_LONG);
+            mToast = Toast.makeText(BaseApp.getInstance(), messageId, Toast.LENGTH_LONG);
         } else {
-            mToast.setText(messageID);
+            mToast.setText(messageId);
             mToast.setDuration(Toast.LENGTH_LONG);
         }
         mToast.show();

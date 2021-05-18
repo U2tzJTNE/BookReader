@@ -6,9 +6,10 @@ import android.content.SharedPreferences;
 import com.u2tzjtne.libbase.BaseApp;
 
 /**
- * Created by JK on 2017/10/9.
- * <p>
  * SharedPreferences工具类
+ *
+ * @author JK
+ * @date 2017/10/9
  */
 public class SPUtils {
 

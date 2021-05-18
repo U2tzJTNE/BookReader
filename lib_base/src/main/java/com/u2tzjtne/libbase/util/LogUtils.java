@@ -5,139 +5,136 @@ import android.util.Log;
 
 import com.u2tzjtne.libbase.base.BuildConfig;
 
-import java.util.Locale;
-
+import java.util.Formatter;
 
 /**
- * @author u2tzjtne
+ * 1.支持自动定位当前类名
+ * 2.支持大于4K的长字符
+ *
+ * @author u2tzjtne@gmail.com
+ * @date 2020/04/27
  */
 public class LogUtils {
 
+    private static final int MAX_LEN = 4000;
+    private static final int V = 0x01;
+    private static final int D = 0x02;
+    private static final int I = 0x04;
+    private static final int W = 0x08;
+    private static final int E = 0x10;
+    private static boolean mDebuggable = BuildConfig.DEBUG;
+
     /**
      * 是否允许输出log
+     *
+     * @param mDebuggable
      */
-    private static boolean mDebuggable = BuildConfig.DEBUG;
+    public static void setDebuggable(boolean mDebuggable) {
+        LogUtils.mDebuggable = mDebuggable;
+    }
 
     /**
      * 以级别为 d 的形式输出LOG
      */
     public static void v(String msg) {
-        if (mDebuggable) {
-            Log.v(getTag(), buildMessage(msg));
-        }
+        buildMessage(V, msg);
     }
 
     /**
      * 以级别为 d 的形式输出LOG
      */
     public static void d(String msg) {
-        if (mDebuggable) {
-            Log.d(getTag(), buildMessage(msg));
-        }
+        buildMessage(D, msg);
     }
 
     /**
      * 以级别为 i 的形式输出LOG
      */
     public static void i(String msg) {
-        if (mDebuggable) {
-            Log.i(getTag(), buildMessage(msg));
-        }
+        buildMessage(I, msg);
     }
 
     /**
      * 以级别为 w 的形式输出LOG
      */
     public static void w(String msg) {
-        if (mDebuggable) {
-            Log.w(getTag(), buildMessage(msg));
-        }
-    }
-
-    /**
-     * 以级别为 w 的形式输出Throwable
-     */
-    public static void w(Throwable tr) {
-        if (mDebuggable) {
-            Log.w(getTag(), "", tr);
-        }
-    }
-
-    /**
-     * 以级别为 w 的形式输出LOG信息和Throwable
-     */
-    public static void w(String msg, Throwable tr) {
-        if (mDebuggable && null != msg) {
-            Log.w(getTag(), msg, tr);
-        }
+        buildMessage(W, msg);
     }
 
     /**
      * 以级别为 e 的形式输出LOG
      */
     public static void e(String msg) {
-        if (mDebuggable) {
-            Log.e(getTag(), buildMessage(msg));
-        }
-    }
-
-    /**
-     * 以级别为 e 的形式输出Throwable
-     */
-    public static void e(Throwable tr) {
-        if (mDebuggable) {
-            Log.e(getTag(), "", tr);
-        }
-    }
-
-    /**
-     * 以级别为 e 的形式输出LOG信息和Throwable
-     */
-    public static void e(String msg, Throwable tr) {
-        if (mDebuggable && null != msg) {
-            Log.e(getTag(), msg, tr);
-        }
-    }
-
-    /**
-     * 获取当前调用者的类名
-     *
-     * @return
-     */
-    private static String getTag() {
-        StackTraceElement[] trace = new Throwable().fillInStackTrace()
-                .getStackTrace();
-        String callingClass = "";
-        for (int i = 2; i < trace.length; i++) {
-            Class<?> clazz = trace[i].getClass();
-            if (!clazz.equals(LogUtils.class)) {
-                callingClass = trace[i].getClassName();
-                callingClass = callingClass.substring(callingClass
-                        .lastIndexOf('.') + 1);
-                break;
-            }
-        }
-        return callingClass;
+        buildMessage(E, msg);
     }
 
     /**
      * 构建日志消息
      *
-     * @param msg
+     * @param msg 消息
      * @return
      */
-    private static String buildMessage(String msg) {
-        StackTraceElement[] trace = new Throwable().fillInStackTrace()
-                .getStackTrace();
-        String caller = "";
-        for (int i = 2; i < trace.length; i++) {
-            Class<?> clazz = trace[i].getClass();
-            if (!clazz.equals(LogUtils.class)) {
-                caller = trace[i].getMethodName();
-                break;
+    private static void buildMessage(int type, String msg) {
+        if (mDebuggable) {
+            StackTraceElement[] trace = new Throwable().fillInStackTrace().getStackTrace();
+            String tag = "";
+            String methodName = "";
+            int lineNumber = 0;
+            for (int i = 2; i < trace.length; i++) {
+                Class<?> clazz = trace[i].getClass();
+                if (!clazz.equals(LogUtils.class)) {
+                    tag = trace[i].getClassName();
+                    methodName = trace[i].getMethodName();
+                    lineNumber = trace[i].getLineNumber();
+                    break;
+                }
             }
+            String formatMsg = new Formatter()
+                    .format("[%d/%s/%s]: " + msg,
+                            lineNumber,
+                            Thread.currentThread().getName(),
+                            methodName
+                    ).toString();
+            String formatTag = tag.substring(tag.lastIndexOf('.') + 1);
+            printLog(type, formatTag, formatMsg);
         }
-        return String.format(Locale.US, "[%d] %s: %s", Thread.currentThread()
-                .getId(), caller, msg);
+    }
+
+    private static void printLog(int type, String tag, String msg) {
+        int len = msg.length();
+        int countOfSub = len / MAX_LEN;
+        if (countOfSub > 0) {
+            int index = 0;
+            String sub;
+            for (int i = 0; i < countOfSub; i++) {
+                sub = msg.substring(index, index + MAX_LEN);
+                printSubLog(type, tag, sub);
+                index += MAX_LEN;
+            }
+            printSubLog(type, tag, msg.substring(index, len));
+        } else {
+            printSubLog(type, tag, msg);
+        }
+    }
+
+    private static void printSubLog(final int type, final String tag, String msg) {
+        switch (type) {
+            case V:
+                Log.v(tag, msg);
+                break;
+            default:
+            case D:
+                Log.d(tag, msg);
+                break;
+            case I:
+                Log.i(tag, msg);
+                break;
+            case W:
+                Log.w(tag, msg);
+                break;
+            case E:
+                Log.e(tag, msg);
+                break;
+        }
     }
 }

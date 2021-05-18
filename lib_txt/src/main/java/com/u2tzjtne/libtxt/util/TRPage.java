@@ -3,7 +3,8 @@ package com.u2tzjtne.libtxt.util;
 import java.util.List;
 
 /**
- * Created by Administrator on 2016/8/11 0011.
+ * @author Administrator
+ * @date 2016/8/11 0011
  */
 public class TRPage {
     private long begin;
@@ -30,10 +31,10 @@ public class TRPage {
         return lines;
     }
 
-    public String getLineToString(){
-        String text ="";
-        if (lines != null){
-            for (String line : lines){
+    public String getLineToString() {
+        String text = "";
+        if (lines != null) {
+            for (String line : lines) {
                 text += line;
             }
         }

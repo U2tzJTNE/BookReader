@@ -23,7 +23,7 @@ import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import androidx.localbroadcastmanager.content.LocalBroadcastManager
 import com.u2tzjtne.libepub.Config
-import com.u2tzjtne.libepub.EpubReader
+import com.u2tzjtne.libepub.EPUBReader
 import com.u2tzjtne.libepub.R
 import com.u2tzjtne.libepub.mediaoverlay.MediaController
 import com.u2tzjtne.libepub.mediaoverlay.MediaControllerCallbacks
@@ -75,7 +75,7 @@ class ReadPageFragment : Fragment(),
             val args = Bundle()
             args.putInt(BUNDLE_SPINE_INDEX, spineIndex)
             args.putString(BUNDLE_BOOK_TITLE, bookTitle)
-            args.putString(EpubReader.EXTRA_BOOK_ID, bookId)
+            args.putString(EPUBReader.EXTRA_BOOK_ID, bookId)
             args.putSerializable(BUNDLE_SPINE_ITEM, spineRef)
             fragment.arguments = args
             return fragment
@@ -145,7 +145,7 @@ class ReadPageFragment : Fragment(),
         spineIndex = arguments!!.getInt(BUNDLE_SPINE_INDEX)
         mBookTitle = arguments!!.getString(BUNDLE_BOOK_TITLE)
         spineItem = arguments!!.getSerializable(BUNDLE_SPINE_ITEM) as Link
-        mBookId = arguments!!.getString(EpubReader.EXTRA_BOOK_ID)
+        mBookId = arguments!!.getString(EPUBReader.EXTRA_BOOK_ID)
 
         chapterUrl = Uri.parse(mActivityCallback?.streamerUrl + spineItem.href!!.substring(1))
 
@@ -608,8 +608,8 @@ class ReadPageFragment : Fragment(),
             locations.cfi = cfi
             lastReadLocator = ReadLocator(mBookId!!, href, created, locations)
 
-            val intent = Intent(EpubReader.ACTION_SAVE_READ_LOCATOR)
-            intent.putExtra(EpubReader.EXTRA_READ_LOCATOR, lastReadLocator as Parcelable?)
+            val intent = Intent(EPUBReader.ACTION_SAVE_READ_LOCATOR)
+            intent.putExtra(EPUBReader.EXTRA_READ_LOCATOR, lastReadLocator as Parcelable?)
             LocalBroadcastManager.getInstance(context!!).sendBroadcast(intent)
 
             (this as java.lang.Object).notify()

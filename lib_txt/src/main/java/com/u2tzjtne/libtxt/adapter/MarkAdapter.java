@@ -22,7 +22,6 @@ import java.util.List;
 public class MarkAdapter extends BaseAdapter {
     private Context mContext;
     private List<BookMarks> list ;
-    private Config config;
     private Typeface typeface;
     private PageFactory pageFactory;
 
@@ -30,20 +29,20 @@ public class MarkAdapter extends BaseAdapter {
         mContext = context;
         this.list = list;
         pageFactory = PageFactory.getInstance();
-        config = config.getInstance();
-        typeface = config.getTypeface();
+        typeface = Config.getInstance().getTypeface();
     }
 
     @Override
     public int getCount() {
-        // TODO Auto-generated method stub
         return list.size();
     }
 
+    @Override
     public Object getItem(int position) {
         return list.get(position);
     }
 
+    @Override
     public long getItemId(int position) {
         return position;
     }
@@ -56,29 +55,27 @@ public class MarkAdapter extends BaseAdapter {
         if (convertView == null) {
             viewHolder = new ViewHolder();
             convertView = inflater.inflate(R.layout.item_bookmark,null);
-            viewHolder.text_mark = (TextView) convertView.findViewById(R.id.text_mark);
-            viewHolder.progress1 = (TextView) convertView.findViewById(R.id.progress1);
-            viewHolder.mark_time = (TextView) convertView.findViewById(R.id.mark_time);
-            viewHolder.text_mark.setTypeface(typeface);
-            viewHolder.progress1.setTypeface(typeface);
-            viewHolder.mark_time.setTypeface(typeface);
+            viewHolder.textMark = convertView.findViewById(R.id.text_mark);
+            viewHolder.progress = convertView.findViewById(R.id.progress1);
+            viewHolder.markTime = convertView.findViewById(R.id.mark_time);
+            viewHolder.textMark.setTypeface(typeface);
+            viewHolder.progress.setTypeface(typeface);
+            viewHolder.markTime.setTypeface(typeface);
             convertView.setTag(viewHolder);
         }else {
             viewHolder = (ViewHolder) convertView.getTag();
         }
-        viewHolder.text_mark.setText(list.get(position).getText());
+        viewHolder.textMark.setText(list.get(position).getText());
         long begin = list.get(position).getBegin();
         float fPercent = (float) (begin * 1.0 / pageFactory.getBookLen());
         DecimalFormat df = new DecimalFormat("#0.0");
         String strPercent = df.format(fPercent * 100) + "%";
-        viewHolder.progress1.setText(strPercent);
-        viewHolder.mark_time.setText(list.get(position).getTime().substring(0, 16));
+        viewHolder.progress.setText(strPercent);
+        viewHolder.markTime.setText(list.get(position).getTime().substring(0, 16));
         return convertView;
     }
 
-    class ViewHolder {
-
-        TextView text_mark,progress1,mark_time;
+    static class ViewHolder {
+        TextView textMark, progress, markTime;
     }
-
 }

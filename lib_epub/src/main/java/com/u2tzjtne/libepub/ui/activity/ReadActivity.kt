@@ -47,7 +47,7 @@ import androidx.localbroadcastmanager.content.LocalBroadcastManager
 import com.u2tzjtne.libepub.Config
 import com.u2tzjtne.libepub.Constants
 import com.u2tzjtne.libepub.Constants.*
-import com.u2tzjtne.libepub.EpubReader
+import com.u2tzjtne.libepub.EPUBReader
 import com.u2tzjtne.libepub.R
 import com.u2tzjtne.libepub.model.DisplayUnit
 import com.u2tzjtne.libepub.model.HighlightImpl
@@ -137,7 +137,7 @@ class ReadActivity : AppCompatActivity(),
             Log.v(LOG_TAG, "-> closeBroadcastReceiver -> onReceive -> " + intent.action!!)
 
             val action = intent.action
-            if (action != null && action == EpubReader.ACTION_CLOSE_FOLIOREADER) {
+            if (action != null && action == EPUBReader.ACTION_CLOSE_EPUBREADER) {
 
                 try {
                     val activityManager = context.getSystemService(Context.ACTIVITY_SERVICE) as ActivityManager
@@ -149,7 +149,7 @@ class ReadActivity : AppCompatActivity(),
 
                 val closeIntent = Intent(applicationContext, ReadActivity::class.java)
                 closeIntent.flags = Intent.FLAG_ACTIVITY_CLEAR_TOP or Intent.FLAG_ACTIVITY_SINGLE_TOP
-                closeIntent.action = EpubReader.ACTION_CLOSE_FOLIOREADER
+                closeIntent.action = EPUBReader.ACTION_CLOSE_EPUBREADER
                 this@ReadActivity.startActivity(closeIntent)
             }
         }
@@ -200,7 +200,7 @@ class ReadActivity : AppCompatActivity(),
         Log.v(LOG_TAG, "-> onNewIntent")
 
         val action = getIntent().action
-        if (action != null && action == EpubReader.ACTION_CLOSE_FOLIOREADER) {
+        if (action != null && action == EPUBReader.ACTION_CLOSE_EPUBREADER) {
 
             if (topActivity == null || topActivity == false) {
                 // ReadActivity was already left, so no need to broadcast ReadLocator again.
@@ -228,7 +228,7 @@ class ReadActivity : AppCompatActivity(),
         topActivity = true
 
         val action = intent.action
-        if (action != null && action == EpubReader.ACTION_CLOSE_FOLIOREADER) {
+        if (action != null && action == EPUBReader.ACTION_CLOSE_EPUBREADER) {
             // ReadActivity is topActivity, so need to broadcast ReadLocator.
             finish()
         }
@@ -253,7 +253,7 @@ class ReadActivity : AppCompatActivity(),
         density = displayMetrics!!.density
         LocalBroadcastManager.getInstance(this).registerReceiver(
             closeBroadcastReceiver,
-            IntentFilter(EpubReader.ACTION_CLOSE_FOLIOREADER)
+            IntentFilter(EPUBReader.ACTION_CLOSE_EPUBREADER)
         )
 
         // Fix for screen get turned off while reading
@@ -271,7 +271,7 @@ class ReadActivity : AppCompatActivity(),
             searchQuery = savedInstanceState.getCharSequence(SearchActivity.BUNDLE_SAVE_SEARCH_QUERY)
         }
 
-        mBookId = intent.getStringExtra(EpubReader.EXTRA_BOOK_ID)
+        mBookId = intent.getStringExtra(EPUBReader.EXTRA_BOOK_ID)
         mEpubSourceType = intent.extras!!.getSerializable(ReadActivity.INTENT_EPUB_SOURCE_TYPE) as EpubSourceType
         if (mEpubSourceType == EpubSourceType.RAW) {
             mEpubRawId = intent.extras!!.getInt(ReadActivity.INTENT_EPUB_SOURCE_PATH)
@@ -424,7 +424,7 @@ class ReadActivity : AppCompatActivity(),
             intent.putExtra(CHAPTER_SELECTED, "")
         }
 
-        intent.putExtra(EpubReader.EXTRA_BOOK_ID, mBookId)
+        intent.putExtra(EPUBReader.EXTRA_BOOK_ID, mBookId)
         intent.putExtra(Constants.BOOK_TITLE, bookFileName)
 
         startActivityForResult(intent, RequestCode.CONTENT_HIGHLIGHT.value)
@@ -486,7 +486,7 @@ class ReadActivity : AppCompatActivity(),
             }
         }
 
-        portNumber = intent.getIntExtra(EpubReader.EXTRA_PORT_NUMBER, Constants.DEFAULT_PORT_NUMBER)
+        portNumber = intent.getIntExtra(EPUBReader.EXTRA_PORT_NUMBER, Constants.DEFAULT_PORT_NUMBER)
         portNumber = AppUtil.getAvailablePortNumber(portNumber)
 
         r2StreamerServer = Server(portNumber)
@@ -497,7 +497,7 @@ class ReadActivity : AppCompatActivity(),
 
         r2StreamerServer!!.start()
 
-        EpubReader.initRetrofit(streamerUrl)
+        EPUBReader.initRetrofit(streamerUrl)
     }
 
     private fun onBookInitFailure() {
@@ -842,9 +842,9 @@ class ReadActivity : AppCompatActivity(),
             r2StreamerServer!!.stop()
 
         if (isFinishing) {
-            localBroadcastManager.sendBroadcast(Intent(EpubReader.ACTION_FOLIOREADER_CLOSED))
-            EpubReader.get().retrofit = null
-            EpubReader.get().r2StreamerApi = null
+            localBroadcastManager.sendBroadcast(Intent(EPUBReader.ACTION_EPUBREADER_CLOSED))
+            EPUBReader.get().retrofit = null
+            EPUBReader.get().r2StreamerApi = null
         }
     }
 

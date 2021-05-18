@@ -19,7 +19,7 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import com.u2tzjtne.libepub.Config;
 import com.u2tzjtne.libepub.Constants;
-import com.u2tzjtne.libepub.EpubReader;
+import com.u2tzjtne.libepub.EPUBReader;
 import com.u2tzjtne.libepub.model.HighLight;
 import com.u2tzjtne.libepub.model.HighlightImpl;
 import com.u2tzjtne.libepub.model.event.UpdateHighlightEvent;
@@ -41,7 +41,7 @@ public class HighlightFragment extends Fragment implements HighlightAdapter.High
     public static HighlightFragment newInstance(String bookId, String epubTitle) {
         HighlightFragment highlightFragment = new HighlightFragment();
         Bundle args = new Bundle();
-        args.putString(EpubReader.EXTRA_BOOK_ID, bookId);
+        args.putString(EPUBReader.EXTRA_BOOK_ID, bookId);
         args.putString(Constants.BOOK_TITLE, epubTitle);
         highlightFragment.setArguments(args);
         return highlightFragment;
@@ -64,7 +64,7 @@ public class HighlightFragment extends Fragment implements HighlightAdapter.High
         super.onViewCreated(view, savedInstanceState);
         RecyclerView highlightsView = (RecyclerView) mRootView.findViewById(R.id.rv_highlights);
         Config config = AppUtil.getSavedConfig(getActivity());
-        mBookId = getArguments().getString(EpubReader.EXTRA_BOOK_ID);
+        mBookId = getArguments().getString(EPUBReader.EXTRA_BOOK_ID);
 
         if (config.isNightMode()) {
             mRootView.findViewById(R.id.rv_highlights).

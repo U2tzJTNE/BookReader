@@ -70,7 +70,7 @@ public class Config {
     }
 
     public void setPageMode(int pageMode) {
-        sp.edit().putInt(PAGE_MODE_KEY, pageMode).commit();
+        sp.edit().putInt(PAGE_MODE_KEY, pageMode).apply();
     }
 
     public int getBookBgType() {
@@ -78,7 +78,7 @@ public class Config {
     }
 
     public void setBookBg(int type) {
-        sp.edit().putInt(BOOK_BG_KEY, type).commit();
+        sp.edit().putInt(BOOK_BG_KEY, type).apply();
     }
 
     public Typeface getTypeface() {
@@ -90,8 +90,7 @@ public class Config {
     }
 
     public String getTypefacePath() {
-        String path = sp.getString(FONT_TYPE_KEY, FONTTYPE_QIHEI);
-        return path;
+        return sp.getString(FONT_TYPE_KEY, FONTTYPE_QIHEI);
     }
 
     public Typeface getTypeface(String typeFacePath) {
@@ -106,7 +105,7 @@ public class Config {
 
     public void setTypeface(String typefacePath) {
         typeface = getTypeface(typefacePath);
-        sp.edit().putString(FONT_TYPE_KEY, typefacePath).commit();
+        sp.edit().putString(FONT_TYPE_KEY, typefacePath).apply();
     }
 
     public float getFontSize() {
@@ -118,7 +117,7 @@ public class Config {
 
     public void setFontSize(float fontSize) {
         mFontSize = fontSize;
-        sp.edit().putFloat(FONT_SIZE_KEY, fontSize).commit();
+        sp.edit().putFloat(FONT_SIZE_KEY, fontSize).apply();
     }
 
     /**
@@ -129,7 +128,7 @@ public class Config {
     }
 
     public void setDayOrNight(boolean isNight) {
-        sp.edit().putBoolean(NIGHT_KEY, isNight).commit();
+        sp.edit().putBoolean(NIGHT_KEY, isNight).apply();
     }
 
     public Boolean isSystemLight() {
@@ -137,7 +136,7 @@ public class Config {
     }
 
     public void setSystemLight(Boolean isSystemLight) {
-        sp.edit().putBoolean(SYSTEM_LIGHT_KEY, isSystemLight).commit();
+        sp.edit().putBoolean(SYSTEM_LIGHT_KEY, isSystemLight).apply();
     }
 
     public float getLight() {
@@ -152,6 +151,6 @@ public class Config {
      */
     public void setLight(float light) {
         this.light = light;
-        sp.edit().putFloat(LIGHT_KEY, light).commit();
+        sp.edit().putFloat(LIGHT_KEY, light).apply();
     }
 }

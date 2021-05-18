@@ -4,7 +4,7 @@ import android.os.Bundle
 import android.util.Log
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
-import com.u2tzjtne.libepub.EpubReader
+import com.u2tzjtne.libepub.EPUBReader
 import com.u2tzjtne.libepub.model.locators.SearchItemType
 import com.u2tzjtne.libepub.model.locators.SearchLocator
 import com.u2tzjtne.libepub.network.R2StreamerApi
@@ -21,7 +21,7 @@ class SearchViewModel : ViewModel() {
     }
 
     var liveAdapterDataBundle: MutableLiveData<Bundle> = MutableLiveData()
-    private var r2StreamerApi: R2StreamerApi? = EpubReader.get().r2StreamerApi
+    private var r2StreamerApi: R2StreamerApi? = EPUBReader.get().r2StreamerApi
     private var searchCallCount: Int = 0
     private var successSearchCallCount: Int = 0
     private var errorSearchCallCount: Int = 0

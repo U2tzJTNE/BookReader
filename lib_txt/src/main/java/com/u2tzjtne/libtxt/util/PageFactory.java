@@ -472,7 +472,7 @@ public class PageFactory {
     }
 
     public TRPage getNextPage() {
-        mBookUtil.setPostition(currentPage.getEnd());
+        mBookUtil.setPosition(currentPage.getEnd());
 
         TRPage trPage = new TRPage();
         trPage.setBegin(currentPage.getEnd() + 1);
@@ -484,7 +484,7 @@ public class PageFactory {
     }
 
     public TRPage getPrePage() {
-        mBookUtil.setPostition(currentPage.getBegin());
+        mBookUtil.setPosition(currentPage.getBegin());
 
         TRPage trPage = new TRPage();
         trPage.setEnd(mBookUtil.getPosition() - 1);
@@ -499,7 +499,7 @@ public class PageFactory {
         TRPage trPage = new TRPage();
         trPage.setBegin(begin);
 
-        mBookUtil.setPostition(begin - 1);
+        mBookUtil.setPosition(begin - 1);
         trPage.setLines(getNextLines());
         trPage.setEnd(mBookUtil.getPosition());
         return trPage;
@@ -537,7 +537,7 @@ public class PageFactory {
 
             if (lines.size() == mLineCount) {
                 if (line.length() > 0) {
-                    mBookUtil.setPostition(mBookUtil.getPosition() - 1);
+                    mBookUtil.setPosition(mBookUtil.getPosition() - 1);
                 }
                 break;
             }
@@ -598,9 +598,9 @@ public class PageFactory {
 
         if (num > 0) {
             if (mBookUtil.getPosition() > 0) {
-                mBookUtil.setPostition(mBookUtil.getPosition() + num + 2);
+                mBookUtil.setPosition(mBookUtil.getPosition() + num + 2);
             } else {
-                mBookUtil.setPostition(mBookUtil.getPosition() + num);
+                mBookUtil.setPosition(mBookUtil.getPosition() + num);
             }
         }
 

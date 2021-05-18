@@ -2,7 +2,7 @@ package com.u2tzjtne.libreader;
 
 import android.content.Context;
 
-import com.u2tzjtne.libepub.EpubReader;
+import com.u2tzjtne.libepub.EPUBReader;
 import com.u2tzjtne.libpdf.ReadActivity;
 
 /**
@@ -17,9 +17,10 @@ public class Reader {
                 ReadActivity.Companion.start(context,book.getPath(),book.getPageNumber());
                 break;
             case TXT:
+
                 break;
             case EPUB:
-                EpubReader.get().openBook(book.getPath(),"0");
+                EPUBReader.get().openBook(book.getPath(),"0");
                 break;
             default:
                 break;

@@ -56,5 +56,4 @@ public class BookMarks extends DataSupport {
     public void setBookPath(String bookPath) {
         this.bookPath = bookPath;
     }
-
 }

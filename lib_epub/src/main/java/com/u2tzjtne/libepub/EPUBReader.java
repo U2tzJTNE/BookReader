@@ -33,17 +33,17 @@ import java.util.concurrent.TimeUnit;
  * @date 9/13/2017
  */
 
-public class EpubReader {
+public class EPUBReader {
 
     @SuppressLint("StaticFieldLeak")
-    private static EpubReader singleton = null;
+    private static EPUBReader singleton = null;
 
     public static final String EXTRA_BOOK_ID = "com.u2tzjtne.libepub.extra.BOOK_ID";
     public static final String EXTRA_READ_LOCATOR = "com.u2tzjtne.libepub.extra.READ_LOCATOR";
     public static final String EXTRA_PORT_NUMBER = "com.u2tzjtne.libepub.extra.PORT_NUMBER";
     public static final String ACTION_SAVE_READ_LOCATOR = "com.u2tzjtne.libepub.action.SAVE_READ_LOCATOR";
-    public static final String ACTION_CLOSE_FOLIOREADER = "com.u2tzjtne.libepub.action.CLOSE_FOLIOREADER";
-    public static final String ACTION_FOLIOREADER_CLOSED = "com.u2tzjtne.libepub.action.FOLIOREADER_CLOSED";
+    public static final String ACTION_CLOSE_EPUBREADER = "com.u2tzjtne.libepub.action.CLOSE_EPUBREADER";
+    public static final String ACTION_EPUBREADER_CLOSED = "com.u2tzjtne.libepub.action.EPUBREADER_CLOSED";
 
     private Context context;
     private Config config;
@@ -61,9 +61,9 @@ public class EpubReader {
 
     public interface OnClosedListener {
         /**
-         * You may call {@link EpubReader#clear()} in this method, if you wouldn't require to open
+         * You may call {@link EPUBReader#clear()} in this method, if you wouldn't require to open
          * an epub again from the current activity.
-         * Or you may call {@link EpubReader#stop()} in this method, if you wouldn't require to open
+         * Or you may call {@link EPUBReader#stop()} in this method, if you wouldn't require to open
          * an epub again from your application.
          */
         void onFolioReaderClosed();
@@ -86,7 +86,7 @@ public class EpubReader {
         public void onReceive(Context context, Intent intent) {
 
             ReadLocator readLocator =
-                    (ReadLocator) intent.getSerializableExtra(EpubReader.EXTRA_READ_LOCATOR);
+                    (ReadLocator) intent.getSerializableExtra(EPUBReader.EXTRA_READ_LOCATOR);
             if (readLocatorListener != null) {
                 readLocatorListener.saveReadLocator(readLocator);
             }
@@ -102,25 +102,25 @@ public class EpubReader {
         }
     };
 
-    public static EpubReader get() {
+    public static EPUBReader get() {
 
         if (singleton == null) {
-            synchronized (EpubReader.class) {
+            synchronized (EPUBReader.class) {
                 if (singleton == null) {
                     if (AppContext.get() == null) {
                         throw new IllegalStateException("-> context == null");
                     }
-                    singleton = new EpubReader(AppContext.get());
+                    singleton = new EPUBReader(AppContext.get());
                 }
             }
         }
         return singleton;
     }
 
-    private EpubReader() {
+    private EPUBReader() {
     }
 
-    private EpubReader(Context context) {
+    private EPUBReader(Context context) {
         this.context = context;
         DbAdapter.initialize(context);
 
@@ -130,29 +130,29 @@ public class EpubReader {
         localBroadcastManager.registerReceiver(readLocatorReceiver,
                 new IntentFilter(ACTION_SAVE_READ_LOCATOR));
         localBroadcastManager.registerReceiver(closedReceiver,
-                new IntentFilter(ACTION_FOLIOREADER_CLOSED));
+                new IntentFilter(ACTION_EPUBREADER_CLOSED));
     }
 
-    public EpubReader openBook(String assetOrSdcardPath) {
+    public EPUBReader openBook(String assetOrSdcardPath) {
         Intent intent = getIntentFromUrl(assetOrSdcardPath, 0);
         context.startActivity(intent);
         return singleton;
     }
 
-    public EpubReader openBook(int rawId) {
+    public EPUBReader openBook(int rawId) {
         Intent intent = getIntentFromUrl(null, rawId);
         context.startActivity(intent);
         return singleton;
     }
 
-    public EpubReader openBook(String assetOrSdcardPath, String bookId) {
+    public EPUBReader openBook(String assetOrSdcardPath, String bookId) {
         Intent intent = getIntentFromUrl(assetOrSdcardPath, 0);
         intent.putExtra(EXTRA_BOOK_ID, bookId);
         context.startActivity(intent);
         return singleton;
     }
 
-    public EpubReader openBook(int rawId, String bookId) {
+    public EPUBReader openBook(int rawId, String bookId) {
         Intent intent = getIntentFromUrl(null, rawId);
         intent.putExtra(EXTRA_BOOK_ID, bookId);
         context.startActivity(intent);
@@ -193,13 +193,13 @@ public class EpubReader {
      *                       config if it is null in application context or will fetch previously
      *                       saved one while execution.
      */
-    public EpubReader setConfig(Config config, boolean overrideConfig) {
+    public EPUBReader setConfig(Config config, boolean overrideConfig) {
         this.config = config;
         this.overrideConfig = overrideConfig;
         return singleton;
     }
 
-    public EpubReader setPortNumber(int portNumber) {
+    public EPUBReader setPortNumber(int portNumber) {
         this.portNumber = portNumber;
         return singleton;
     }
@@ -227,22 +227,22 @@ public class EpubReader {
         singleton.r2StreamerApi = singleton.retrofit.create(R2StreamerApi.class);
     }
 
-    public EpubReader setOnHighlightListener(OnHighlightListener onHighlightListener) {
+    public EPUBReader setOnHighlightListener(OnHighlightListener onHighlightListener) {
         this.onHighlightListener = onHighlightListener;
         return singleton;
     }
 
-    public EpubReader setReadLocatorListener(ReadLocatorListener readLocatorListener) {
+    public EPUBReader setReadLocatorListener(ReadLocatorListener readLocatorListener) {
         this.readLocatorListener = readLocatorListener;
         return singleton;
     }
 
-    public EpubReader setOnClosedListener(OnClosedListener onClosedListener) {
+    public EPUBReader setOnClosedListener(OnClosedListener onClosedListener) {
         this.onClosedListener = onClosedListener;
         return singleton;
     }
 
-    public EpubReader setReadLocator(ReadLocator readLocator) {
+    public EPUBReader setReadLocator(ReadLocator readLocator) {
         this.readLocator = readLocator;
         return singleton;
     }
@@ -253,22 +253,22 @@ public class EpubReader {
     }
 
     /**
-     * Closes all the activities related to EpubReader.
-     * After closing all the activities of EpubReader, callback can be received in
+     * Closes all the activities related to EPUBReader.
+     * After closing all the activities of EPUBReader, callback can be received in
      * {@link OnClosedListener#onFolioReaderClosed()} if implemented.
      * Developer is still bound to call {@link #clear()} or {@link #stop()}
      * for clean up if required.
      */
     public void close() {
-        Intent intent = new Intent(EpubReader.ACTION_CLOSE_FOLIOREADER);
+        Intent intent = new Intent(EPUBReader.ACTION_CLOSE_EPUBREADER);
         LocalBroadcastManager.getInstance(context).sendBroadcast(intent);
     }
 
     /**
      * Nullifies readLocator and listeners.
      * This method ideally should be used in onDestroy() of Activity or Fragment.
-     * Use this method if you want to use EpubReader singleton instance again in the application,
-     * else use {@link #stop()} which destruct the EpubReader singleton instance.
+     * Use this method if you want to use EPUBReader singleton instance again in the application,
+     * else use {@link #stop()} which destruct the EPUBReader singleton instance.
      */
     public static synchronized void clear() {
 
@@ -281,9 +281,9 @@ public class EpubReader {
     }
 
     /**
-     * Destructs the EpubReader singleton instance.
+     * Destructs the EPUBReader singleton instance.
      * Use this method only if you are sure that you won't need to use
-     * EpubReader singleton instance again in application, else use {@link #clear()}.
+     * EPUBReader singleton instance again in application, else use {@link #clear()}.
      */
     public static synchronized void stop() {
 
